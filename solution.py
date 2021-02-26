@@ -4,10 +4,29 @@ streets_lengths = []
 cars_path = []
 
 '''
-With the GCD:
+With giving one second to every street:
+b: 4,565,642 points
+c: 1,231,878 points
+d: 969,685 points
+e: 661,797 points
+f: 455,737 points
+
+With giving one second to every street + removing unused streets:
+b: 4,561,806 points -
+c: 1,279,378 points +
+d: 1,498,946 points + 
+e: 678,041 points +
+f: 604,153 points +
+
+With the GCD + removing unused streets:
 the gcd approach improved file 'f' by +164,466 points. (to be 768,619 points)
 but the others worsened by way more.
 'd' got 0 points :(
+b: 1,102,160 points -
+c: 685,019 points -
+d: 0 points -
+e: 651,832 points -
+f: 768,619 points +
 '''
 
 
@@ -77,8 +96,7 @@ def decide_streets_opening_on_intersection(inter_index):
 def main():
     letters = ['b', 'c', 'e', 'f']
     # d needs to be run alone! too big
-    letters = ['d']
-    # letters = ['a']
+    # letters = ['d']
     for letter in letters:
         global streets_names
         global streets_co
@@ -143,8 +161,6 @@ def main():
             num_of_street = 0
 
             print('weights', streets_weights, streets_indexes, count_streets)
-            if inter == 8:
-                print()
             for street_index in streets_indexes:
                 # f2.write(streets_names[street_index] + ' 1\n')
                 output += streets_names[street_index] + ' ' + str(streets_weights[num_of_street]) + '\n'
