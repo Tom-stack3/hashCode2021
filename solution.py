@@ -3,6 +3,13 @@ streets_co = []
 streets_lengths = []
 cars_path = []
 
+'''
+With the GCD:
+the gcd approach improved file 'f' by +164,466 points. (to be 768,619 points)
+but the others worsened by way more.
+'d' got 0 points :(
+'''
+
 
 def gcd(my_list):
     result = my_list[0]
@@ -151,13 +158,6 @@ def main():
         print('done with ' + letter)
         print('---------------')
 
-
-'''
-With the GCD:
-the gcd approach improved file 'f' by +164,466 points. (to be 768,619 points)
-but the others worsened by way more.
-'d' got 0 points :(
-'''
 
 if __name__ == '__main__':
     main()
