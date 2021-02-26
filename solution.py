@@ -4,6 +4,20 @@ streets_lengths = []
 cars_path = []
 
 
+def gcd(my_list):
+    result = my_list[0]
+    for x in my_list[1:]:
+        if result < x:
+            temp = result
+            result = x
+            x = temp
+        while x != 0:
+            temp = x
+            x = result % x
+            result = temp
+    return result
+
+
 def calc_car_road(car_path):
     sum_of_road = 0
     for road_i in car_path:
@@ -13,7 +27,7 @@ def calc_car_road(car_path):
 
 def count_cars_on_street(street_index):
     num_of_future_cars_on_street = 0
-    cars_path_without_beginning = [cars_path[i] for i in range(1, len(cars_path))]
+    cars_path_without_beginning = [path[1:] for path in cars_path]
     for current_car_path in cars_path_without_beginning:
         if street_index in current_car_path:
             num_of_future_cars_on_street += 1
@@ -33,23 +47,31 @@ def count_streets_on_intersection(inter_index):
 
 
 def decide_streets_opening_on_intersection(inter_index):
+    if inter_index == 8:
+        if 'g' == 'g':
+            print("d")
     num_of_streets_on_inter, streets_indexes = count_streets_on_intersection(inter_index)
-    # print(num_of_streets_on_inter, streets_indexes)
+    streets_weights = []
+    final_streets_indexes = streets_indexes.copy()
     for street_index in streets_indexes:
         count_cars = count_cars_on_street(street_index)
         # if the street is unused
         if count_cars == 0:
             num_of_streets_on_inter -= 1
-            streets_indexes.remove(street_index)
-
-    # print(num_of_streets_on_inter, streets_indexes)
-    return num_of_streets_on_inter, streets_indexes
+            final_streets_indexes.remove(street_index)
+            continue
+        streets_weights.append(count_cars)
+    if streets_weights:
+        current_gcd = gcd(streets_weights)
+        streets_weights = [int(w / current_gcd) for w in streets_weights]
+    return num_of_streets_on_inter, final_streets_indexes, streets_weights
 
 
 def main():
     letters = ['b', 'c', 'e', 'f']
-    # d needs to be run alone! to big
-    # letters = ['d']
+    # d needs to be run alone! too big
+    letters = ['d']
+    # letters = ['a']
     for letter in letters:
         global streets_names
         global streets_co
@@ -59,7 +81,6 @@ def main():
         streets_co = []
         streets_lengths = []
         cars_path = []
-        # f = open("new_" + letter + ".txt", "r")
         f = open("./input/" + letter + ".txt", "r")
         first_line = f.readline()
         num_of_intersections = int(first_line.split(' ')[1])
@@ -83,11 +104,10 @@ def main():
             cars_path.append(cur_path)
         f.close()
         # done initializing the information
-        print('path:', cars_path)
         # cars_path.sort(key=calc_car_road)
         # print('new path:', cars_path)
         f.close()
-        f2 = open("./output/" + "1_" + letter + "_output.txt", "w")
+
         '''
         first_car_path = cars_path[0]
         print(first_car_path)
@@ -106,19 +126,38 @@ def main():
         # f2.write(str(num_intersections_changed) + '\n')
         output += '\n'
         for inter in range(num_intersections_changed):
-            count_streets, streets_indexes = decide_streets_opening_on_intersection(inter)
+            print('inter', inter)
+            count_streets, streets_indexes, streets_weights = decide_streets_opening_on_intersection(inter)
             if count_streets <= 0:
-                num_intersections_changed-=1
+                num_intersections_changed -= 1
                 continue
-            #f2.write(str(inter) + '\n' + str(count_streets) + '\n')
+            # f2.write(str(inter) + '\n' + str(count_streets) + '\n')
             output += str(inter) + '\n' + str(count_streets) + '\n'
+            num_of_street = 0
+
+            print('weights', streets_weights, streets_indexes, count_streets)
+            if inter == 8:
+                print()
             for street_index in streets_indexes:
                 # f2.write(streets_names[street_index] + ' 1\n')
-                output += streets_names[street_index] + ' 1\n'
+                output += streets_names[street_index] + ' ' + str(streets_weights[num_of_street]) + '\n'
+                # output += streets_names[street_index] + ' 1\n'
+                num_of_street += 1
         output = str(num_intersections_changed) + output
+        f2 = open("./output/" + "1_" + letter + "_output.txt", "w")
         f2.write(output)
         f2.close()
+        print('---------------')
+        print('done with ' + letter)
+        print('---------------')
 
+
+'''
+With the GCD:
+the gcd approach improved file 'f' by +164,466 points. (to be 768,619 points)
+but the others worsened by way more.
+'d' got 0 points :(
+'''
 
 if __name__ == '__main__':
     main()
