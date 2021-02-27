@@ -1,4 +1,4 @@
-27.02.2021 21:30 version
+27.02.2021 22:18 version
 regular solution.py:
 ---------------
 done with b
@@ -28,7 +28,7 @@ work time took: 24.601165294647217
 
 
 
-27.02.2021 22:10 version
+27.02.2021 22:18 version
 faster_solution.py:
 ---------------
 done with b
