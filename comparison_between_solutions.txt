@@ -1,0 +1,57 @@
+27.02.2021 21:30 version
+regular solution.py:
+---------------
+done with b
+---------------
+init time took: 1.453139066696167
+work time took: 7.251601934432983
+---------------
+done with c
+---------------
+init time took: 16.257524967193604
+work time took: 74.38800930976868
+---------------
+done with d
+---------------
+init time took: 120.10809779167175
+work time took: 515.7313907146454
+---------------
+done with e
+---------------
+init time took: 0.03587818145751953
+work time took: 0.23038411140441895
+---------------
+done with f
+---------------
+init time took: 12.278181314468384
+work time took: 24.601165294647217
+
+
+
+27.02.2021 22:10 version
+faster_solution.py:
+---------------
+done with b
+---------------
+init time took: 0.015956878662109375
+work time took: 4.039169073104858
+---------------
+done with c
+---------------
+init time took: 0.05584430694580078
+work time took: 26.357518911361694
+---------------
+done with d
+---------------
+init time took: 0.18351292610168457
+work time took: 57.019471168518066
+---------------
+done with e
+---------------
+init time took: 0.004985809326171875
+work time took: 0.030918598175048828
+---------------
+done with f
+---------------
+init time took: 0.04188728332519531
+work time took: 1.0611748695373535
