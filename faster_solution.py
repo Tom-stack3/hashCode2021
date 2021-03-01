@@ -1,13 +1,16 @@
 import time
+import random
 
 # streets = { "street_name": [(B, E), L, Cars_passing], ... }
 streets = dict()
 # list of cars path's. each car path is a list of the street names on it's way.
 cars_path = []
 
-use_gcd_method = True
-use_weights_method = False
+use_gcd_method = False
+use_half_method = True
+use_weights_method = True
 ignore_unused_streets = True
+
 
 '''
 With giving one second to every street:
@@ -30,6 +33,38 @@ c: 1,243,532 points -
 d: 1,191 points -
 e: 692,645 points + (+7,876)
 f: 807,398 points -
+
+With half method (giving 2 to above average) + removing unused streets:
+b: 4,566,452 points -
+c: 1,300,021 points + (+664)
+d: 476,068 points -
+e: 715,932 points + (+23,287)
+f: 1,131,136 points + (+312,053)
+
+With half method (giving 3 to above average) + removing unused streets:
+b: 4,565,238 points -
+c: 1,296,088 points -
+d: 31,445 points -
+e: 695,505 points -
+f: 1,241,303 points + (+110,167)
+
+With half method (giving 4 to above average) + removing unused streets:
+b: 4,563,960 points -
+c: 1,293,007 points -
+d: 130,054 points -
+e: 666,647 points -
+f: 1,282,297 points + (+40,994)
+
+With half method (giving 5 to above average) + removing unused streets:
+b: 4,562,340 points -
+c: 1,287,333 points -
+d: 0 points -
+e: 635,520 points -
+f: 1,289,613 points + (+7,316)
+
+With half method (choosing random between 5 and 6) + removing unused streets:
+f: 1,300,888 points + (+11,275)
+b,c,d,e were always worsened
 '''
 
 
@@ -88,16 +123,30 @@ def decide_streets_opening_on_intersection(inter_index):
                 num_of_streets_on_inter -= 1
                 streets_names_chosen.remove(street_name)
                 continue
+        # if the street is used, we add the number of cars pass it
         streets_weights.append(cars_pass_in_street)
+
     # if we want to use the gcd method and streets_weights list is not empty
     if use_gcd_method and streets_weights:
         current_gcd = gcd(streets_weights)
         streets_weights = [int(w / current_gcd) for w in streets_weights]
+
+    # if we want to use the half method and streets_weights list is not empty
+    elif use_half_method and streets_weights:
+        cars_passes_average = sum(streets_weights)/len(streets_weights)
+        for i in range(len(streets_weights)):
+            if streets_weights[i] > cars_passes_average:
+                streets_weights[i] = random.randint(5, 6)
+            else:
+                streets_weights[i] = 1
+
     return num_of_streets_on_inter, streets_names_chosen, streets_weights
 
 
 def main():
     letters = ['b', 'c', 'e', 'f', 'd']
+    letters = ['f','e','b','c']
+    letters = ['f']
     for letter in letters:
         global streets
         global cars_path
@@ -154,21 +203,9 @@ def main():
         print('---------------')
         print('done with ' + letter)
         print('---------------')
-        print('init time took:', init_time)
-        print('work time took:', time.time() - start_t)
+        print('init time took:', init_time, 'seconds')
+        print('work time took:', time.time() - start_t, 'seconds')
 
-
-'''
-
-
-regular:
-init time took: 120.10809779167175
-work time took: 515.7313907146454
-
-faster:
-init time took: 4.666066884994507
-work time took: 686.1625516414642
-'''
 
 if __name__ == '__main__':
     main()
