@@ -145,8 +145,7 @@ def decide_streets_opening_on_intersection(inter_index):
 
 def main():
     letters = ['b', 'c', 'e', 'f', 'd']
-    letters = ['f','e','b','c']
-    letters = ['f']
+
     for letter in letters:
         global streets
         global cars_path
