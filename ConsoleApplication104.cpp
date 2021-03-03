@@ -105,7 +105,6 @@ int main(){
 	cout << "======================" << endl;
 	cout << output;
 
-	// nigga work please
 	ofstream myfile;
 	myfile.open("output_ur_mama.txt");
 	myfile << output;
