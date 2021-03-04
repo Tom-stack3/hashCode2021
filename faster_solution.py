@@ -1,16 +1,19 @@
 import time
+from datetime import datetime
 import random
+import math
 
 # streets = { "street_name": [(B, E), L, Cars_passing], ... }
 streets = dict()
 # list of cars path's. each car path is a list of the street names on it's way.
 cars_path = []
 
+use_random_method = False
+use_length_cars_ratio_method = False
 use_gcd_method = False
 use_half_method = True
 use_weights_method = True
 ignore_unused_streets = True
-
 
 '''
 With giving one second to every street:
@@ -65,6 +68,8 @@ f: 1,289,613 points + (+7,316)
 With half method (choosing random between 5 and 6) + removing unused streets:
 f: 1,300,888 points + (+11,275)
 b,c,d,e were always worsened
+
+
 '''
 
 
@@ -126,6 +131,25 @@ def decide_streets_opening_on_intersection(inter_index):
         # if the street is used, we add the number of cars pass it
         streets_weights.append(cars_pass_in_street)
 
+    streets_names_chosen = streets_names_chosen
+
+    if use_length_cars_ratio_method and streets_weights:
+        index = 0
+        # we go over the streets
+        for s in streets_names_chosen:
+            # ceil(a/b) = (a + b - 1)/b
+            ratio_ceiling = (streets[s][2] + streets[s][1] - 1)/streets[s][1]
+            streets_weights[index] = int(ratio_ceiling)
+            index += 1
+
+    # if we want to use the random method and streets_weights list is not empty
+    if use_random_method and streets_weights:
+        index = 0
+        # we go over the streets
+        for s in streets_names_chosen:
+            streets_weights[index] = random.randint(1, streets[s][2])
+            index += 1
+
     # if we want to use the gcd method and streets_weights list is not empty
     if use_gcd_method and streets_weights:
         current_gcd = gcd(streets_weights)
@@ -133,10 +157,10 @@ def decide_streets_opening_on_intersection(inter_index):
 
     # if we want to use the half method and streets_weights list is not empty
     elif use_half_method and streets_weights:
-        cars_passes_average = sum(streets_weights)/len(streets_weights)
+        cars_passes_average = sum(streets_weights) / len(streets_weights)
         for i in range(len(streets_weights)):
             if streets_weights[i] > cars_passes_average:
-                streets_weights[i] = random.randint(5, 6)
+                streets_weights[i] = random.randint(1, 2)
             else:
                 streets_weights[i] = 1
 
@@ -145,7 +169,8 @@ def decide_streets_opening_on_intersection(inter_index):
 
 def main():
     letters = ['b', 'c', 'e', 'f', 'd']
-
+    letters = ['f', 'e', 'b', 'c']
+    letters = ['e']
     for letter in letters:
         global streets
         global cars_path
@@ -196,7 +221,11 @@ def main():
                     output += street + ' 1\n'
                 num_of_street += 1
         output = str(num_intersections_changed) + output
-        f2 = open("./output/" + "1_" + letter + "_output.txt", "w")
+
+        now = datetime.now()
+        current_time = now.strftime("%H.%M.%S")
+
+        f2 = open("./output/" + "1_" + current_time + "_" + letter + "_output.txt", "w")
         f2.write(output)
         f2.close()
         print('---------------')
